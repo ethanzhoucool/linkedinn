@@ -58,13 +58,10 @@ export function FeedScreen() {
         renderItem={renderItem}
         contentContainerStyle={styles.contentContainer}
         ListHeaderComponent={
-          <>
-            <PostComposerInline
-              avatarUrl={state.currentUser.avatarUrl}
-              onPress={openComposer}
-            />
-            <Divider />
-          </>
+          <PostComposerInline
+            avatarUrl={state.currentUser.avatarUrl}
+            onPress={openComposer}
+          />
         }
         ItemSeparatorComponent={() => <Divider />}
         refreshControl={

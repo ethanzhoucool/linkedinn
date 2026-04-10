@@ -5,9 +5,11 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import {ConnectionRequest} from '../../data/mockConnectionRequests';
 import {Colors, Typography} from '../../theme';
 import {Avatar} from '../common/Avatar';
+import {VerifiedBadge} from '../common/VerifiedBadge';
 import {HairlineDivider} from '../common/Divider';
 
 interface Props {
@@ -20,9 +22,8 @@ interface Props {
 export function ConnectionRequestCard({request, onAccept, onIgnore, onPress}: Props) {
   const {person, timeAgo, context} = request;
 
-  const mutualLabel = context
-    ? context
-    : `${person.mutualConnections} mutual connection${person.mutualConnections !== 1 ? 's' : ''}`;
+  const mutualCount = person.mutualConnections ?? 5;
+  const mutualLabel = `${mutualCount} mutual connection${mutualCount !== 1 ? 's' : ''}`;
 
   return (
     <>
@@ -32,28 +33,36 @@ export function ConnectionRequestCard({request, onAccept, onIgnore, onPress}: Pr
         style={styles.card}>
         <Avatar uri={person.avatarUrl} size={56} />
         <View style={styles.info}>
-          <Text style={styles.name}>{person.name}</Text>
+          <View style={styles.nameRow}>
+            <Text style={styles.name} numberOfLines={1}>{person.name}</Text>
+            {person.verified && (
+              <View style={styles.badgeGap}>
+                <VerifiedBadge size={14} />
+              </View>
+            )}
+          </View>
           <Text style={styles.headline} numberOfLines={1}>
             {person.headline}
           </Text>
-          <Text style={styles.meta}>
-            {mutualLabel} · {timeAgo}
-          </Text>
+          <Text style={styles.mutual}>{mutualLabel}</Text>
+          <Text style={styles.timeAgo}>{timeAgo}</Text>
         </View>
         <View style={styles.actions}>
           <TouchableOpacity
             testID={`network-invite-${request.id}-ignore`}
             onPress={onIgnore}
-            style={styles.ignoreButton}
-            activeOpacity={0.7}>
-            <Text style={styles.ignoreText}>Ignore</Text>
+            style={styles.ignoreCircle}
+            activeOpacity={0.7}
+            hitSlop={{top: 4, bottom: 4, left: 4, right: 4}}>
+            <Icon name="close" size={20} color={Colors.textSecondary} />
           </TouchableOpacity>
           <TouchableOpacity
             testID={`network-invite-${request.id}-accept`}
             onPress={onAccept}
-            style={styles.acceptButton}
-            activeOpacity={0.7}>
-            <Text style={styles.acceptText}>Accept</Text>
+            style={styles.acceptCircle}
+            activeOpacity={0.7}
+            hitSlop={{top: 4, bottom: 4, left: 4, right: 4}}>
+            <Icon name="check" size={20} color={Colors.primary} />
           </TouchableOpacity>
         </View>
       </TouchableOpacity>
@@ -73,46 +82,56 @@ const styles = StyleSheet.create({
   info: {
     flex: 1,
     marginLeft: 12,
-    marginRight: 8,
+    marginRight: 10,
+  },
+  nameRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 2,
+  },
+  badgeGap: {
+    marginLeft: 4,
   },
   name: {
     fontSize: Typography.md,
     fontWeight: '600',
     color: Colors.textPrimary,
-    marginBottom: 2,
   },
   headline: {
     fontSize: Typography.sm,
     color: Colors.textSecondary,
     marginBottom: 2,
   },
-  meta: {
+  mutual: {
+    fontSize: Typography.xs,
+    color: Colors.textSecondary,
+    marginBottom: 1,
+  },
+  timeAgo: {
     fontSize: Typography.xs,
     color: Colors.textTertiary,
   },
   actions: {
+    flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
   },
-  ignoreButton: {
-    paddingVertical: 6,
-    paddingHorizontal: 14,
+  ignoreCircle: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: Colors.gray200,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  ignoreText: {
-    fontSize: Typography.sm,
-    color: Colors.textSecondary,
-    fontWeight: '600',
-  },
-  acceptButton: {
+  acceptCircle: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
     borderWidth: 1.5,
     borderColor: Colors.primary,
-    borderRadius: 16,
-    paddingVertical: 6,
-    paddingHorizontal: 14,
-  },
-  acceptText: {
-    fontSize: Typography.sm,
-    color: Colors.primary,
-    fontWeight: '600',
+    backgroundColor: Colors.card,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

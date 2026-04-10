@@ -3,6 +3,7 @@ import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {Post} from '../../data/mockPosts';
 import {Colors} from '../../theme';
+import {LinkedInThumbIcon} from '../common/LinkedInThumbIcon';
 
 interface Props {
   post: Post;
@@ -22,11 +23,7 @@ export function ReactionBar({post, onLike, onComment, onRepost, onShare}: Props)
         style={styles.button}
         onPress={onLike}
         activeOpacity={0.7}>
-        <Icon
-          name={post.liked ? 'thumb-up-alt' : 'thumb-up-off-alt'}
-          size={22}
-          color={likeColor}
-        />
+        <LinkedInThumbIcon size={22} filled={post.liked} color={likeColor} />
         <Text style={[styles.label, {color: likeColor}]}>Like</Text>
       </TouchableOpacity>
 
@@ -44,7 +41,7 @@ export function ReactionBar({post, onLike, onComment, onRepost, onShare}: Props)
         style={styles.button}
         onPress={onRepost}
         activeOpacity={0.7}>
-        <Icon name="repeat" size={22} color={Colors.textSecondary} />
+        <Icon name="cached" size={22} color={Colors.textSecondary} />
         <Text style={styles.label}>Repost</Text>
       </TouchableOpacity>
 
@@ -73,7 +70,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
   },
   label: {
-    fontSize: 12,
+    fontSize: 13,
     fontWeight: '500',
     color: Colors.textSecondary,
     marginTop: 2,

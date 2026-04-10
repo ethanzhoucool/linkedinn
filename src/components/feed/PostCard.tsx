@@ -14,6 +14,9 @@ import {HairlineDivider} from '../common/Divider';
 import {IconButton} from '../common/IconButton';
 import {formatCount} from '../../utils/format';
 import {ReactionBar} from './ReactionBar';
+import {VerifiedBadge} from '../common/VerifiedBadge';
+import {ConnectionDegreeBadge} from '../common/ConnectionDegreeBadge';
+import {ReactionStack} from '../common/ReactionStack';
 
 const SEE_MORE_THRESHOLD = 200;
 
@@ -35,14 +38,40 @@ export function PostCard({
   onRepost,
 }: Props) {
   const [expanded, setExpanded] = useState(false);
+  const [contextDismissed, setContextDismissed] = useState(false);
   const isLong = post.content.length > SEE_MORE_THRESHOLD;
   const shouldTruncate = isLong && !expanded;
+  const showContext = !!post.contextHeader && !contextDismissed;
+
+  const reactionCounts = {like: post.reactions};
+  const totalLabel = `${formatCount(post.reactions)} reactions`;
 
   return (
     <View
       testID={`feed-post-card-${post.id}`}
       style={styles.card}>
-      {/* Header row */}
+
+      {/* Context header bar */}
+      {showContext && (
+        <>
+          <View style={styles.contextBar}>
+            <Avatar uri={post.author.avatarUrl} size={20} />
+            <Text style={styles.contextText} numberOfLines={1}>
+              {post.contextHeader}
+            </Text>
+            <TouchableOpacity
+              testID={`feed-post-context-dismiss-${post.id}`}
+              onPress={() => setContextDismissed(true)}
+              hitSlop={{top: 8, bottom: 8, left: 8, right: 8}}
+              activeOpacity={0.7}>
+              <Icon name="close" size={16} color={Colors.textSecondary} />
+            </TouchableOpacity>
+          </View>
+          <HairlineDivider />
+        </>
+      )}
+
+      {/* Author block */}
       <View style={styles.header}>
         <TouchableOpacity
           testID={`feed-post-author-${post.id}`}
@@ -51,26 +80,50 @@ export function PostCard({
           activeOpacity={0.7}>
           <Avatar uri={post.author.avatarUrl} size={48} />
           <View style={styles.authorInfo}>
-            <Text style={styles.authorName} numberOfLines={1}>
-              {post.author.name}
-            </Text>
+            {/* Row 1: name + verified + degree */}
+            <View style={styles.nameRow}>
+              <Text style={styles.authorName} numberOfLines={1}>
+                {post.author.name}
+              </Text>
+              {post.author.verified && (
+                <View style={styles.verifiedBadge}>
+                  <VerifiedBadge size={14} />
+                </View>
+              )}
+              <ConnectionDegreeBadge degree={post.author.connectionDegree} />
+            </View>
+            {/* Row 2: headline */}
             <Text style={styles.authorHeadline} numberOfLines={1}>
               {post.author.headline}
             </Text>
+            {/* Row 3: timestamp · Edited · public */}
             <View style={styles.timestampRow}>
               <Text style={styles.timestamp}>{post.timestamp}</Text>
-              <Text style={styles.separator}> · </Text>
+              <Text style={styles.timestampDot}> · </Text>
+              <Text style={styles.timestamp}>Edited</Text>
+              <Text style={styles.timestampDot}> · </Text>
               <Icon name="public" size={12} color={Colors.textTertiary} />
             </View>
           </View>
         </TouchableOpacity>
-        <IconButton
-          name="more-horiz"
-          onPress={() => {}}
-          size={22}
-          color={Colors.textSecondary}
-          style={styles.moreButton}
-        />
+
+        <View style={styles.headerActions}>
+          {!post.author.isFollowing && (
+            <TouchableOpacity
+              style={styles.followButton}
+              onPress={() => {}}
+              activeOpacity={0.7}>
+              <Text style={styles.followText}>+ Follow</Text>
+            </TouchableOpacity>
+          )}
+          <IconButton
+            name="more-horiz"
+            onPress={() => {}}
+            size={22}
+            color={Colors.textSecondary}
+            style={styles.moreButton}
+          />
+        </View>
       </View>
 
       {/* Body text */}
@@ -82,7 +135,7 @@ export function PostCard({
         </Text>
         {isLong && !expanded && (
           <TouchableOpacity onPress={() => setExpanded(true)} activeOpacity={0.7}>
-            <Text style={styles.seeMore}>…see more</Text>
+            <Text style={styles.seeMore}>...more</Text>
           </TouchableOpacity>
         )}
       </View>
@@ -98,18 +151,12 @@ export function PostCard({
 
       {/* Reaction count row */}
       <View style={styles.reactionCountRow}>
-        <View style={styles.reactionEmojis}>
-          <Text style={styles.reactionEmoji}>👍</Text>
-          <Text style={[styles.reactionEmoji, styles.reactionEmojiOverlap]}>❤️</Text>
-          <Text style={[styles.reactionEmoji, styles.reactionEmojiOverlap]}>👏</Text>
-        </View>
-        <Text style={styles.reactionCountText}>
-          {formatCount(post.reactions)}
-        </Text>
-        <Text style={styles.engagementText}>
-          {post.comments > 0
-            ? `${formatCount(post.comments)} comments · ${formatCount(post.reposts)} reposts`
-            : ''}
+        <ReactionStack
+          counts={reactionCounts}
+          totalLabel={totalLabel}
+        />
+        <Text style={styles.commentsText}>
+          {post.comments > 0 ? `${formatCount(post.comments)} comments` : ''}
         </Text>
       </View>
 
@@ -131,6 +178,18 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.card,
     marginBottom: 8,
   },
+  contextBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    gap: 8,
+  },
+  contextText: {
+    flex: 1,
+    fontSize: 13,
+    color: Colors.textSecondary,
+  },
   header: {
     flexDirection: 'row',
     alignItems: 'flex-start',
@@ -148,10 +207,20 @@ const styles = StyleSheet.create({
     marginLeft: 8,
     justifyContent: 'center',
   },
+  nameRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flexWrap: 'nowrap',
+    gap: 4,
+  },
   authorName: {
-    fontSize: 14,
-    fontWeight: '700',
+    fontSize: 15,
+    fontWeight: '600',
     color: Colors.textPrimary,
+    flexShrink: 1,
+  },
+  verifiedBadge: {
+    marginTop: 1,
   },
   authorHeadline: {
     fontSize: 12,
@@ -164,16 +233,30 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   timestamp: {
-    fontSize: 12,
+    fontSize: 11,
     color: Colors.textTertiary,
   },
-  separator: {
-    fontSize: 12,
+  timestampDot: {
+    fontSize: 11,
     color: Colors.textTertiary,
+  },
+  headerActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginLeft: 4,
+  },
+  followButton: {
+    paddingHorizontal: 4,
+    paddingVertical: 2,
+  },
+  followText: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: Colors.primary,
   },
   moreButton: {
     padding: 4,
-    marginLeft: 4,
+    marginLeft: 2,
   },
   body: {
     paddingHorizontal: 12,
@@ -182,7 +265,7 @@ const styles = StyleSheet.create({
   bodyText: {
     fontSize: 14,
     color: Colors.textPrimary,
-    lineHeight: 20,
+    lineHeight: 21,
   },
   seeMore: {
     fontSize: 14,
@@ -191,7 +274,7 @@ const styles = StyleSheet.create({
   },
   postImage: {
     width: '100%',
-    aspectRatio: 16 / 9,
+    aspectRatio: 1.5,
   },
   reactionCountRow: {
     flexDirection: 'row',
@@ -199,26 +282,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 8,
   },
-  reactionEmojis: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginRight: 4,
-  },
-  reactionEmoji: {
-    fontSize: 14,
-  },
-  reactionEmojiOverlap: {
-    marginLeft: -2,
-  },
-  reactionCountText: {
+  commentsText: {
     fontSize: 12,
     color: Colors.textTertiary,
-    marginRight: 4,
-  },
-  engagementText: {
-    flex: 1,
-    fontSize: 12,
-    color: Colors.textTertiary,
-    textAlign: 'right',
   },
 });

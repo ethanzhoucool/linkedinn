@@ -17,6 +17,7 @@ export interface AppState {
   posts: Post[];
   connectionRequests: ConnectionRequest[];
   suggestedPeople: SuggestedPersonWithStatus[];
+  sentInvitations: SuggestedPersonWithStatus[];
   jobs: Job[];
   notifications: NotificationItem[];
   conversations: Conversation[];
@@ -29,6 +30,8 @@ export type AppAction =
   | {type: 'ACCEPT_REQUEST'; requestId: string}
   | {type: 'IGNORE_REQUEST'; requestId: string}
   | {type: 'CONNECT_PERSON'; personId: string}
+  | {type: 'SEND_INVITATION'; personId: string}
+  | {type: 'WITHDRAW_INVITATION'; personId: string}
   | {type: 'TOGGLE_SAVE_JOB'; jobId: string}
   | {type: 'MARK_NOTIFICATION_READ'; notificationId: string}
   | {type: 'SEND_MESSAGE'; conversationId: string; text: string};
@@ -38,6 +41,7 @@ const initialState: AppState = {
   posts: mockPosts,
   connectionRequests,
   suggestedPeople: suggestedPeople.map(p => ({...p, status: 'idle' as const})),
+  sentInvitations: [],
   jobs: mockJobs,
   notifications,
   conversations: mockConversations,
@@ -70,6 +74,8 @@ export function appReducer(state: AppState, action: AppAction): AppState {
           headline: state.currentUser.headline,
           avatarUrl: state.currentUser.avatarUrl,
           isFollowing: false,
+          connectionDegree: '1st',
+          verified: false,
         },
         timestamp: 'Just now',
         content: action.content,
@@ -96,11 +102,33 @@ export function appReducer(state: AppState, action: AppAction): AppState {
         ),
       };
     }
-    case 'CONNECT_PERSON': {
+    case 'CONNECT_PERSON':
+    case 'SEND_INVITATION': {
+      const updatedSuggested = state.suggestedPeople.map(p =>
+        p.id === action.personId ? {...p, status: 'pending' as const} : p,
+      );
+      const target = updatedSuggested.find(p => p.id === action.personId);
+      const alreadyInvited = state.sentInvitations.some(
+        p => p.id === action.personId,
+      );
+      const nextInvitations =
+        target && !alreadyInvited
+          ? [...state.sentInvitations, target]
+          : state.sentInvitations;
+      return {
+        ...state,
+        suggestedPeople: updatedSuggested,
+        sentInvitations: nextInvitations,
+      };
+    }
+    case 'WITHDRAW_INVITATION': {
       return {
         ...state,
         suggestedPeople: state.suggestedPeople.map(p =>
-          p.id === action.personId ? {...p, status: 'pending' as const} : p,
+          p.id === action.personId ? {...p, status: 'idle' as const} : p,
+        ),
+        sentInvitations: state.sentInvitations.filter(
+          p => p.id !== action.personId,
         ),
       };
     }

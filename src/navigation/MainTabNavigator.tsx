@@ -1,5 +1,5 @@
 import React from 'react';
-import {TouchableOpacity} from 'react-native';
+import {TouchableOpacity, View, StyleSheet} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import type {BottomTabBarButtonProps} from '@react-navigation/bottom-tabs';
 import {useNavigation} from '@react-navigation/native';
@@ -24,7 +24,7 @@ function PostTabButton({children}: BottomTabBarButtonProps) {
     <TouchableOpacity
       testID="tab-post"
       accessibilityRole="button"
-      style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}
+      style={styles.tabButton}
       onPress={() => {
         navigation.navigate('PostComposer');
       }}>
@@ -34,13 +34,15 @@ function PostTabButton({children}: BottomTabBarButtonProps) {
 }
 
 function makePressableTabButton(testID: string) {
-  return function TabButton({children, onPress}: BottomTabBarButtonProps) {
+  return function TabButton({children, onPress, accessibilityState}: BottomTabBarButtonProps) {
+    const focused = accessibilityState?.selected ?? false;
     return (
       <TouchableOpacity
         testID={testID}
         accessibilityRole="button"
-        style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}
+        style={styles.tabButton}
         onPress={e => onPress && onPress(e as any)}>
+        {focused && <View style={styles.topIndicator} />}
         {children}
       </TouchableOpacity>
     );
@@ -71,8 +73,12 @@ export function MainTabNavigator() {
         options={{
           tabBarLabel: 'Home',
           tabBarButton: props => <FeedTabButton {...props} />,
-          tabBarIcon: ({color, size}) => (
-            <MaterialIcons name="home" size={size} color={color} />
+          tabBarIcon: ({focused, color, size}) => (
+            <MaterialIcons
+              name={focused ? 'home' : 'home'}
+              size={size}
+              color={color}
+            />
           ),
         }}
       />
@@ -82,8 +88,12 @@ export function MainTabNavigator() {
         options={{
           tabBarLabel: 'My Network',
           tabBarButton: props => <NetworkTabButton {...props} />,
-          tabBarIcon: ({color, size}) => (
-            <MaterialIcons name="people" size={size} color={color} />
+          tabBarIcon: ({focused, color, size}) => (
+            <MaterialIcons
+              name={focused ? 'people' : 'people-outline'}
+              size={size}
+              color={color}
+            />
           ),
         }}
       />
@@ -104,8 +114,12 @@ export function MainTabNavigator() {
         options={{
           tabBarLabel: 'Notifications',
           tabBarButton: props => <NotificationsTabButton {...props} />,
-          tabBarIcon: ({color, size}) => (
-            <MaterialIcons name="notifications" size={size} color={color} />
+          tabBarIcon: ({focused, color, size}) => (
+            <MaterialIcons
+              name={focused ? 'notifications' : 'notifications-none'}
+              size={size}
+              color={color}
+            />
           ),
         }}
       />
@@ -115,11 +129,31 @@ export function MainTabNavigator() {
         options={{
           tabBarLabel: 'Jobs',
           tabBarButton: props => <JobsTabButton {...props} />,
-          tabBarIcon: ({color, size}) => (
-            <MaterialIcons name="work" size={size} color={color} />
+          tabBarIcon: ({focused, color, size}) => (
+            <MaterialIcons
+              name={focused ? 'work' : 'work-outline'}
+              size={size}
+              color={color}
+            />
           ),
         }}
       />
     </Tab.Navigator>
   );
 }
+
+const styles = StyleSheet.create({
+  tabButton: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  topIndicator: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    height: 3,
+    backgroundColor: Colors.primary,
+  },
+});

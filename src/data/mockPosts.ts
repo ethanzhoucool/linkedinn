@@ -4,6 +4,8 @@ export interface PostAuthor {
   headline: string;
   avatarUrl: string;
   isFollowing: boolean;
+  connectionDegree: '1st' | '2nd' | '3rd';
+  verified: boolean;
 }
 
 export interface Post {
@@ -16,6 +18,7 @@ export interface Post {
   comments: number;
   reposts: number;
   liked: boolean;
+  contextHeader?: string;
 }
 
 export const mockPosts: Post[] = [
@@ -24,9 +27,11 @@ export const mockPosts: Post[] = [
     author: {
       id: 'author-1',
       name: 'Marcus Whitfield',
-      headline: 'VP of Engineering at ClearPath Systems',
+      headline: 'VP of Engineering at Figma',
       avatarUrl: 'https://i.pravatar.cc/150?img=1',
       isFollowing: false,
+      connectionDegree: '1st',
+      verified: true,
     },
     timestamp: '2h',
     content:
@@ -35,15 +40,18 @@ export const mockPosts: Post[] = [
     comments: 32,
     reposts: 12,
     liked: false,
+    contextHeader: 'Hayden Chen commented on this',
   },
   {
     id: 'post-2',
     author: {
       id: 'author-2',
       name: 'Priya Ramanathan',
-      headline: 'Product Manager · AI/ML Products at Helix Systems',
+      headline: 'Product Manager · AI/ML Products at Stripe',
       avatarUrl: 'https://i.pravatar.cc/150?img=2',
       isFollowing: true,
+      connectionDegree: '1st',
+      verified: false,
     },
     timestamp: '5h',
     content:
@@ -59,9 +67,11 @@ export const mockPosts: Post[] = [
     author: {
       id: 'author-3',
       name: 'Dana Okafor',
-      headline: 'Staff Software Engineer at Wavelength Studios',
+      headline: 'Staff Software Engineer at Notion',
       avatarUrl: 'https://i.pravatar.cc/150?img=3',
       isFollowing: false,
+      connectionDegree: '2nd',
+      verified: false,
     },
     timestamp: '1d',
     content:
@@ -76,9 +86,11 @@ export const mockPosts: Post[] = [
     author: {
       id: 'author-4',
       name: 'Jordan Blake',
-      headline: 'Founder & CEO at Driftwood Analytics',
+      headline: 'Founder & CEO at Linear',
       avatarUrl: 'https://i.pravatar.cc/150?img=4',
       isFollowing: false,
+      connectionDegree: '2nd',
+      verified: true,
     },
     timestamp: '1d',
     content:
@@ -88,15 +100,18 @@ export const mockPosts: Post[] = [
     comments: 80,
     reposts: 18,
     liked: false,
+    contextHeader: 'Marcus Whitfield and 4 others follow this',
   },
   {
     id: 'post-5',
     author: {
       id: 'author-5',
       name: 'Elena Petrov',
-      headline: 'UX Research Lead at Lumen Health',
+      headline: 'UX Research Lead at Airbnb',
       avatarUrl: 'https://i.pravatar.cc/150?img=5',
       isFollowing: true,
+      connectionDegree: '1st',
+      verified: false,
     },
     timestamp: '2d',
     content:
@@ -111,9 +126,11 @@ export const mockPosts: Post[] = [
     author: {
       id: 'author-6',
       name: 'Sofia Martinez',
-      headline: 'Director of Data Science at Polaris Dynamics',
+      headline: 'Director of Data Science at Spotify',
       avatarUrl: 'https://i.pravatar.cc/150?img=6',
       isFollowing: false,
+      connectionDegree: '2nd',
+      verified: false,
     },
     timestamp: '2d',
     content:
@@ -128,9 +145,11 @@ export const mockPosts: Post[] = [
     author: {
       id: 'author-7',
       name: "Liam O'Brien",
-      headline: 'Senior iOS Engineer at Kestrel AI',
+      headline: 'Senior iOS Engineer at Anthropic',
       avatarUrl: 'https://i.pravatar.cc/150?img=7',
       isFollowing: false,
+      connectionDegree: '3rd',
+      verified: false,
     },
     timestamp: '3d',
     content:
@@ -146,9 +165,11 @@ export const mockPosts: Post[] = [
     author: {
       id: 'author-8',
       name: 'Kenji Tanaka',
-      headline: 'Platform Engineer at Aurora Robotics',
+      headline: 'Platform Engineer at Vercel',
       avatarUrl: 'https://i.pravatar.cc/150?img=8',
       isFollowing: true,
+      connectionDegree: '1st',
+      verified: false,
     },
     timestamp: '3d',
     content:
@@ -163,9 +184,11 @@ export const mockPosts: Post[] = [
     author: {
       id: 'author-9',
       name: 'Aisha Khan',
-      headline: 'Engineering Manager at Sentinel Cloud',
+      headline: 'Engineering Manager at Shopify',
       avatarUrl: 'https://i.pravatar.cc/150?img=9',
       isFollowing: false,
+      connectionDegree: '2nd',
+      verified: true,
     },
     timestamp: '4d',
     content:
@@ -180,9 +203,11 @@ export const mockPosts: Post[] = [
     author: {
       id: 'author-10',
       name: 'Noah Fischer',
-      headline: 'Frontend Architect at Vantage Networks',
+      headline: 'Frontend Architect at Canva',
       avatarUrl: 'https://i.pravatar.cc/150?img=10',
       isFollowing: false,
+      connectionDegree: '3rd',
+      verified: false,
     },
     timestamp: '5d',
     content:
@@ -197,9 +222,11 @@ export const mockPosts: Post[] = [
     author: {
       id: 'author-11',
       name: 'Zara Ahmed',
-      headline: 'Product Designer at Nimbus Labs',
+      headline: 'Product Designer at Figma',
       avatarUrl: 'https://i.pravatar.cc/150?img=11',
       isFollowing: true,
+      connectionDegree: '1st',
+      verified: false,
     },
     timestamp: '6d',
     content:
@@ -215,9 +242,11 @@ export const mockPosts: Post[] = [
     author: {
       id: 'author-12',
       name: 'Diego Ramos',
-      headline: 'Backend Engineer at Driftwood Analytics',
+      headline: 'Backend Engineer at GitHub',
       avatarUrl: 'https://i.pravatar.cc/150?img=12',
       isFollowing: false,
+      connectionDegree: '2nd',
+      verified: false,
     },
     timestamp: '1w',
     content:

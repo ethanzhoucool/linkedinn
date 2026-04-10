@@ -73,3 +73,7 @@ yarn-error.log
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+
+# Reference screenshots (design-only, never commit)
+ref images/
+design-refs/

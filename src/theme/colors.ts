@@ -19,6 +19,8 @@ export const Colors = {
   insightful: '#E7A33E',
   success: '#057642',
   error: '#CC1016',
+  premium: '#915907',
+  tabIndicator: '#0A66C2',
   white: '#FFFFFF',
   black: '#000000',
   gray100: '#F5F5F5',

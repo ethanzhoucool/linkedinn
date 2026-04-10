@@ -16,9 +16,8 @@ interface ActionButton {
 }
 
 const ACTION_BUTTONS: ActionButton[] = [
-  {icon: 'photo-library', label: 'Photo', color: '#4CAF50'},
+  {icon: 'photo-camera', label: 'Photo', color: '#4CAF50'},
   {icon: 'videocam', label: 'Video', color: '#0A66C2'},
-  {icon: 'event', label: 'Event', color: '#FF9800'},
   {icon: 'article', label: 'Write article', color: '#E05D44'},
 ];
 
@@ -68,9 +67,9 @@ const styles = StyleSheet.create({
   },
   pill: {
     flex: 1,
-    height: 40,
+    height: 44,
     borderWidth: 1,
-    borderColor: Colors.border,
+    borderColor: Colors.borderStrong,
     borderRadius: 24,
     justifyContent: 'center',
     paddingHorizontal: 16,

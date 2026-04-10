@@ -5,17 +5,20 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import {Person} from '../../data/mockConnections';
 import {Colors, Typography} from '../../theme';
 import {Avatar} from '../common/Avatar';
+import {VerifiedBadge} from '../common/VerifiedBadge';
 
 interface Props {
   person: Person & {status?: 'idle' | 'pending' | 'connected'};
   onPress: () => void;
   onConnect: () => void;
+  onDismiss: () => void;
 }
 
-export function SuggestedPersonCard({person, onPress, onConnect}: Props) {
+export function SuggestedPersonCard({person, onPress, onConnect, onDismiss}: Props) {
   const isPending = person.status === 'pending' || person.status === 'connected';
 
   return (
@@ -27,15 +30,32 @@ export function SuggestedPersonCard({person, onPress, onConnect}: Props) {
       {/* Gray cover strip */}
       <View style={styles.cover} />
 
+      {/* Dismiss X at top-right */}
+      <TouchableOpacity
+        testID={`network-suggested-${person.id}-dismiss`}
+        onPress={onDismiss}
+        activeOpacity={0.7}
+        style={styles.dismissButton}
+        hitSlop={{top: 4, bottom: 4, left: 4, right: 4}}>
+        <Icon name="close" size={14} color={Colors.textSecondary} />
+      </TouchableOpacity>
+
       {/* Avatar overlapping cover */}
       <View style={styles.avatarWrapper}>
         <Avatar uri={person.avatarUrl} size={72} />
       </View>
 
       <View style={styles.body}>
-        <Text style={styles.name} numberOfLines={2}>
-          {person.name}
-        </Text>
+        <View style={styles.nameRow}>
+          <Text style={styles.name} numberOfLines={2}>
+            {person.name}
+          </Text>
+          {person.verified && (
+            <View style={styles.badgeGap}>
+              <VerifiedBadge size={13} />
+            </View>
+          )}
+        </View>
         <Text style={styles.headline} numberOfLines={2}>
           {person.headline}
         </Text>
@@ -73,6 +93,18 @@ const styles = StyleSheet.create({
     height: 60,
     backgroundColor: Colors.gray200,
   },
+  dismissButton: {
+    position: 'absolute',
+    top: 6,
+    right: 6,
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: Colors.gray300,
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 10,
+  },
   avatarWrapper: {
     alignItems: 'center',
     marginTop: -36,
@@ -83,12 +115,22 @@ const styles = StyleSheet.create({
     paddingBottom: 12,
     alignItems: 'center',
   },
+  nameRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 4,
+    flexWrap: 'wrap',
+  },
+  badgeGap: {
+    marginLeft: 3,
+    marginTop: 1,
+  },
   name: {
     fontSize: Typography.base,
     fontWeight: '600',
     color: Colors.textPrimary,
     textAlign: 'center',
-    marginBottom: 4,
   },
   headline: {
     fontSize: Typography.xs,

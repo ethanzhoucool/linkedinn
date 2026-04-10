@@ -12,6 +12,8 @@ import {IconButton} from './IconButton';
 
 type Nav = StackNavigationProp<RootStackParamList>;
 
+const unread = true;
+
 export function TopBar() {
   const insets = useSafeAreaInsets();
   const navigation = useNavigation<Nav>();
@@ -43,14 +45,19 @@ export function TopBar() {
           <Text style={styles.searchPlaceholder}>Search</Text>
         </TouchableOpacity>
 
-        {/* Right: Messaging icon */}
-        <IconButton
-          name="chat-bubble-outline"
-          testID="topbar-messaging"
-          onPress={() => navigation.navigate('Messaging')}
-          size={24}
-          color={Colors.textSecondary}
-        />
+        {/* Right: Messaging icon with unread dot */}
+        <View style={styles.messagingWrap}>
+          <IconButton
+            name="chat-bubble"
+            testID="topbar-messaging"
+            onPress={() => navigation.navigate('Messaging')}
+            size={24}
+            color={Colors.textSecondary}
+          />
+          {unread && (
+            <View style={styles.unreadDot} />
+          )}
+        </View>
       </View>
     </View>
   );
@@ -89,5 +96,19 @@ const styles = StyleSheet.create({
     color: Colors.textSecondary,
     fontSize: 14,
     flex: 1,
+  },
+  messagingWrap: {
+    position: 'relative',
+  },
+  unreadDot: {
+    position: 'absolute',
+    top: -2,
+    right: -2,
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    backgroundColor: Colors.error,
+    borderWidth: 2,
+    borderColor: Colors.white,
   },
 });

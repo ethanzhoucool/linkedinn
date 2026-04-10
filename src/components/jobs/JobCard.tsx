@@ -3,20 +3,20 @@ import {
   View,
   Text,
   TouchableOpacity,
-  Image,
   StyleSheet,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {Job} from '../../data/mockJobs';
 import {Colors, Typography} from '../../theme';
+import {CompanyLogo} from '../common/CompanyLogo';
 
 interface Props {
   job: Job;
   onPress: () => void;
-  onToggleSave: () => void;
+  onDismiss: () => void;
 }
 
-export function JobCard({job, onPress, onToggleSave}: Props) {
+export function JobCard({job, onPress, onDismiss}: Props) {
   return (
     <>
       <TouchableOpacity
@@ -25,9 +25,11 @@ export function JobCard({job, onPress, onToggleSave}: Props) {
         onPress={onPress}
         style={styles.card}>
         {/* Company logo */}
-        <Image
-          source={{uri: job.companyLogoUrl}}
-          style={styles.logo}
+        <CompanyLogo
+          uri={job.companyLogoUrl}
+          size={48}
+          rounded={4}
+          fallbackLetter={job.company.charAt(0)}
         />
 
         {/* Main content */}
@@ -35,42 +37,19 @@ export function JobCard({job, onPress, onToggleSave}: Props) {
           <Text style={styles.title} numberOfLines={2}>
             {job.title}
           </Text>
-          <Text style={styles.companyLocation}>
-            {job.company} · {job.location}
-          </Text>
-
-          {/* Chip row */}
-          <View style={styles.chipRow}>
-            <View style={styles.chip}>
-              <Text style={styles.chipText}>{job.applicants} applicants</Text>
-            </View>
-            {job.remote && (
-              <View style={styles.chip}>
-                <Text style={styles.chipText}>Remote</Text>
-              </View>
-            )}
-            {job.easyApply && (
-              <View style={styles.chip}>
-                <Text style={styles.chipText}>Easy Apply</Text>
-              </View>
-            )}
-          </View>
-
+          <Text style={styles.company}>{job.company}</Text>
+          <Text style={styles.location}>{job.location}</Text>
           <Text style={styles.postedAt}>{job.postedAt} ago</Text>
         </View>
 
-        {/* Bookmark icon */}
+        {/* Dismiss X */}
         <TouchableOpacity
-          testID={`job-save-${job.id}`}
-          onPress={onToggleSave}
+          testID={`job-dismiss-${job.id}`}
+          onPress={onDismiss}
           activeOpacity={0.7}
-          style={styles.bookmarkButton}
+          style={styles.dismissButton}
           hitSlop={{top: 8, bottom: 8, left: 8, right: 8}}>
-          <Icon
-            name={job.saved ? 'bookmark' : 'bookmark-border'}
-            size={24}
-            color={job.saved ? Colors.primary : Colors.textSecondary}
-          />
+          <Icon name="close" size={20} color={Colors.textTertiary} />
         </TouchableOpacity>
       </TouchableOpacity>
       <View style={styles.hairline} />
@@ -81,19 +60,14 @@ export function JobCard({job, onPress, onToggleSave}: Props) {
 const styles = StyleSheet.create({
   card: {
     backgroundColor: Colors.card,
-    paddingHorizontal: 12,
+    paddingHorizontal: 16,
     paddingVertical: 12,
     flexDirection: 'row',
     alignItems: 'flex-start',
   },
-  logo: {
-    width: 56,
-    height: 56,
-    borderRadius: 4,
-    marginRight: 12,
-  },
   content: {
     flex: 1,
+    marginLeft: 12,
     marginRight: 8,
   },
   title: {
@@ -102,36 +76,21 @@ const styles = StyleSheet.create({
     color: Colors.textPrimary,
     marginBottom: 2,
   },
-  companyLocation: {
+  company: {
+    fontSize: Typography.base,
+    color: Colors.textPrimary,
+    marginBottom: 1,
+  },
+  location: {
     fontSize: Typography.sm,
     color: Colors.textSecondary,
-    marginBottom: 6,
-  },
-  chipRow: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 6,
-    marginBottom: 4,
-  },
-  chip: {
-    borderWidth: 1,
-    borderColor: Colors.borderStrong,
-    borderRadius: 4,
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-  },
-  chipText: {
-    fontSize: 11,
-    color: Colors.textSecondary,
+    marginBottom: 2,
   },
   postedAt: {
-    fontSize: 11,
+    fontSize: Typography.xs,
     color: Colors.textTertiary,
-    marginTop: 2,
   },
-  bookmarkButton: {
-    alignItems: 'center',
-    justifyContent: 'flex-start',
+  dismissButton: {
     paddingTop: 2,
   },
   hairline: {
