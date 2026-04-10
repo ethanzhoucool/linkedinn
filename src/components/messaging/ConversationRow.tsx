@@ -29,8 +29,9 @@ export function ConversationRow({conversation, onPress}: Props) {
           <Text
             style={[
               styles.name,
-              unread ? styles.nameSemibold : styles.nameMedium,
-            ]}>
+              unread ? styles.nameUnread : styles.nameRead,
+            ]}
+            numberOfLines={1}>
             {person.name}
           </Text>
           <Text
@@ -53,6 +54,7 @@ export function ConversationRow({conversation, onPress}: Props) {
           {unread && <View style={styles.unreadDot} />}
         </View>
       </View>
+      <HairlineDivider />
     </TouchableOpacity>
   );
 }
@@ -61,8 +63,8 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 12,
-    paddingVertical: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
     backgroundColor: Colors.card,
   },
   content: {
@@ -81,11 +83,11 @@ const styles = StyleSheet.create({
     flex: 1,
     marginRight: 8,
   },
-  nameSemibold: {
-    fontWeight: '600',
+  nameUnread: {
+    fontWeight: '700',
   },
-  nameMedium: {
-    fontWeight: '500',
+  nameRead: {
+    fontWeight: '600',
   },
   timestamp: {
     fontSize: Typography.xs,
@@ -102,7 +104,7 @@ const styles = StyleSheet.create({
   },
   previewUnread: {
     color: Colors.textPrimary,
-    fontWeight: '600',
+    fontWeight: '700',
   },
   previewRead: {
     color: Colors.textSecondary,

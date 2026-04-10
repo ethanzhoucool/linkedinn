@@ -26,10 +26,10 @@ export function JobCard({job, onPress, onDismiss}: Props) {
         style={styles.card}>
         {/* Company logo */}
         <CompanyLogo
-          uri={job.companyLogoUrl}
+          slug={job.logoSlug}
+          name={job.company}
           size={48}
-          rounded={4}
-          fallbackLetter={job.company.charAt(0)}
+          rounded={6}
         />
 
         {/* Main content */}

@@ -41,7 +41,7 @@ export function MessageBubble({message, isMe, showTimestamp}: Props) {
 const styles = StyleSheet.create({
   row: {
     paddingHorizontal: 12,
-    paddingVertical: 2,
+    paddingVertical: 3,
     flexDirection: 'row',
   },
   rowMe: {
@@ -54,16 +54,19 @@ const styles = StyleSheet.create({
     maxWidth: '75%',
     paddingHorizontal: 14,
     paddingVertical: 10,
-    borderRadius: 18,
   },
   bubbleMe: {
     backgroundColor: Colors.primary,
+    borderRadius: 18,
+    borderTopRightRadius: 4,
   },
   bubbleThem: {
     backgroundColor: Colors.gray100,
+    borderRadius: 18,
+    borderTopLeftRadius: 4,
   },
   text: {
-    fontSize: Typography.base,
+    fontSize: Typography.md,
     fontWeight: '400',
   },
   textMe: {

@@ -2,7 +2,6 @@ import React from 'react';
 import {ScrollView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useNavigation} from '@react-navigation/native';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useApp} from '../store/AppContext';
 import {
   aboutText,
@@ -25,33 +24,52 @@ type ProfileNavProp = StackNavigationProp<RootStackParamList, 'Profile'>;
 export function ProfileScreen() {
   const navigation = useNavigation<ProfileNavProp>();
   const {state} = useApp();
-  const insets = useSafeAreaInsets();
   const {show, toastProps} = useToast();
 
   const SKILLS_PREVIEW = 4;
   const displayedSkills = skills.slice(0, SKILLS_PREVIEW);
 
   return (
-    <View style={[styles.root, {paddingTop: insets.top}]} testID="profile-screen">
+    <View style={styles.root} testID="profile-screen">
       <ScrollView
         style={styles.scroll}
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}>
 
-        {/* Profile Header card */}
-        <View style={styles.card}>
-          <ProfileHeader
-            user={state.currentUser}
-            onBack={() => navigation.goBack()}
-          />
+        {/* Profile Header — includes cover, avatar, name, actions */}
+        <ProfileHeader
+          user={state.currentUser}
+          onBack={() => navigation.goBack()}
+        />
+
+        <View style={styles.gap} />
+
+        {/* Analytics mini-card */}
+        <View style={styles.analyticsCard}>
+          <Text style={styles.analyticsHeading}>Analytics</Text>
+          <View style={styles.analyticsRow}>
+            <View style={styles.analyticsStat}>
+              <Text style={styles.analyticsNumber}>
+                {state.currentUser.profileViews}
+              </Text>
+              <Text style={styles.analyticsLabel}>
+                Profile viewers this week
+              </Text>
+            </View>
+            <View style={styles.analyticsDivider} />
+            <View style={styles.analyticsStat}>
+              <Text style={styles.analyticsNumber}>
+                {state.currentUser.postImpressions}
+              </Text>
+              <Text style={styles.analyticsLabel}>Post impressions</Text>
+            </View>
+          </View>
         </View>
 
         <View style={styles.gap} />
 
         {/* About section */}
-        <View testID="profile-section-about">
-          <AboutSection text={aboutText} />
-        </View>
+        <AboutSection text={aboutText} />
 
         <View style={styles.gap} />
 
@@ -74,9 +92,21 @@ export function ProfileScreen() {
               />
             </View>
           </View>
-          {experiences.map(exp => (
-            <ExperienceItem key={exp.id} experience={exp} />
+          {experiences.map((exp, idx) => (
+            <ExperienceItem
+              key={exp.id}
+              experience={exp}
+              isLast={idx === experiences.length - 1}
+            />
           ))}
+          <TouchableOpacity
+            onPress={() => show('Coming soon')}
+            activeOpacity={0.7}
+            style={styles.showAll}>
+            <Text style={styles.showAllText}>
+              Show all {experiences.length} experiences
+            </Text>
+          </TouchableOpacity>
         </View>
 
         <View style={styles.gap} />
@@ -100,8 +130,12 @@ export function ProfileScreen() {
               />
             </View>
           </View>
-          {education.map(edu => (
-            <EducationItem key={edu.id} education={edu} />
+          {education.map((edu, idx) => (
+            <EducationItem
+              key={edu.id}
+              education={edu}
+              isLast={idx === education.length - 1}
+            />
           ))}
         </View>
 
@@ -139,7 +173,7 @@ export function ProfileScreen() {
           </TouchableOpacity>
         </View>
 
-        <View style={styles.gap} />
+        <View style={styles.bottomPad} />
       </ScrollView>
 
       <Toast {...toastProps} />
@@ -157,7 +191,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background,
   },
   scrollContent: {
-    paddingBottom: Spacing.xl,
+    paddingBottom: 0,
   },
   card: {
     backgroundColor: Colors.card,
@@ -166,6 +200,46 @@ const styles = StyleSheet.create({
     height: 8,
     backgroundColor: Colors.background,
   },
+  bottomPad: {
+    height: 80,
+    backgroundColor: Colors.background,
+  },
+  // Analytics card
+  analyticsCard: {
+    backgroundColor: Colors.card,
+    paddingHorizontal: Spacing.lg,
+    paddingTop: Spacing.lg,
+    paddingBottom: Spacing.lg,
+  },
+  analyticsHeading: {
+    fontSize: Typography.xl,
+    fontWeight: '700',
+    color: Colors.textPrimary,
+    marginBottom: Spacing.md,
+  },
+  analyticsRow: {
+    flexDirection: 'row',
+    alignItems: 'stretch',
+  },
+  analyticsStat: {
+    flex: 1,
+  },
+  analyticsDivider: {
+    width: StyleSheet.hairlineWidth,
+    backgroundColor: Colors.border,
+    marginHorizontal: Spacing.md,
+  },
+  analyticsNumber: {
+    fontSize: Typography.xxl,
+    fontWeight: '700',
+    color: Colors.textPrimary,
+  },
+  analyticsLabel: {
+    fontSize: Typography.sm,
+    color: Colors.textSecondary,
+    marginTop: 2,
+  },
+  // Section
   sectionHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -176,7 +250,7 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: Typography.xl,
-    ...Typography.semibold,
+    fontWeight: '700',
     color: Colors.textPrimary,
   },
   sectionActions: {

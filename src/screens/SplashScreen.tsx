@@ -15,7 +15,7 @@ export function SplashScreen() {
   useEffect(() => {
     Animated.timing(opacity, {
       toValue: 1,
-      duration: 600,
+      duration: 500,
       useNativeDriver: true,
     }).start();
 
@@ -31,6 +31,9 @@ export function SplashScreen() {
       <Animated.View style={[styles.content, {opacity}]}>
         <LinkedInLogo size={96} variant="mark" />
         <Text style={styles.wordmark}>LinkedInn</Text>
+        <Text style={styles.tagline}>
+          Welcome to your professional community
+        </Text>
       </Animated.View>
     </View>
   );
@@ -52,5 +55,14 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     marginTop: 16,
     letterSpacing: -0.5,
+  },
+  tagline: {
+    color: Colors.white,
+    fontSize: 14,
+    fontWeight: '400',
+    marginTop: 8,
+    opacity: 0.9,
+    textAlign: 'center',
+    paddingHorizontal: 32,
   },
 });

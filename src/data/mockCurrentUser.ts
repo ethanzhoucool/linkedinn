@@ -4,6 +4,7 @@ export interface CurrentUser {
   headline: string;
   company: string;
   companyLogoUrl: string;
+  logoSlug: string;
   location: string;
   avatarUrl: string;
   coverUrl: string;
@@ -18,10 +19,10 @@ export const currentUser: CurrentUser = {
   headline: 'Senior Product Engineer at Figma',
   company: 'Figma',
   companyLogoUrl: 'https://logo.clearbit.com/figma.com',
+  logoSlug: 'figma',
   location: 'San Francisco Bay Area',
   avatarUrl: 'https://i.pravatar.cc/150?img=12',
-  coverUrl:
-    'https://ui-avatars.com/api/?name=Alex+Chen&background=0A66C2&color=fff&size=512',
+  coverUrl: '',
   connectionsCount: 847,
   profileViews: 134,
   postImpressions: 2340,

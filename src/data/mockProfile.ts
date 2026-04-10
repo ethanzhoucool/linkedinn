@@ -3,6 +3,7 @@ export interface Experience {
   title: string;
   company: string;
   companyLogoUrl: string;
+  logoSlug: string;
   startDate: string;
   endDate: string;
   duration: string;
@@ -18,6 +19,7 @@ export interface Education {
   startYear: string;
   endYear: string;
   logoUrl: string;
+  logoSlug?: string;
 }
 
 export interface Skill {
@@ -35,6 +37,7 @@ export const experiences: Experience[] = [
     title: 'Senior Product Engineer',
     company: 'Figma',
     companyLogoUrl: 'https://logo.clearbit.com/figma.com',
+    logoSlug: 'figma',
     startDate: 'Jan 2022',
     endDate: 'Present',
     duration: '2 yrs 4 mos',
@@ -47,6 +50,7 @@ export const experiences: Experience[] = [
     title: 'Software Engineer II',
     company: 'Stripe',
     companyLogoUrl: 'https://logo.clearbit.com/stripe.com',
+    logoSlug: 'stripe',
     startDate: 'Mar 2020',
     endDate: 'Dec 2021',
     duration: '1 yr 10 mos',
@@ -57,8 +61,9 @@ export const experiences: Experience[] = [
   {
     id: 'exp-3',
     title: 'Software Engineer',
-    company: 'Shopify',
-    companyLogoUrl: 'https://logo.clearbit.com/shopify.com',
+    company: 'Notion',
+    companyLogoUrl: 'https://logo.clearbit.com/notion.so',
+    logoSlug: 'notion',
     startDate: 'Jul 2018',
     endDate: 'Feb 2020',
     duration: '1 yr 8 mos',
@@ -69,8 +74,9 @@ export const experiences: Experience[] = [
   {
     id: 'exp-4',
     title: 'Software Engineering Intern',
-    company: 'GitHub',
-    companyLogoUrl: 'https://logo.clearbit.com/github.com',
+    company: 'Linear',
+    companyLogoUrl: 'https://logo.clearbit.com/linear.app',
+    logoSlug: 'linear',
     startDate: 'May 2017',
     endDate: 'Aug 2017',
     duration: '4 mos',

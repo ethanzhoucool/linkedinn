@@ -1,29 +1,36 @@
 import React from 'react';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
+import {CompanyLogo} from '../common/CompanyLogo';
+import {HairlineDivider} from '../common/Divider';
 import {Colors, Typography, Spacing} from '../../theme';
 import {Education} from '../../data/mockProfile';
 
 interface Props {
   education: Education;
+  isLast?: boolean;
 }
 
-export function EducationItem({education}: Props) {
+export function EducationItem({education, isLast}: Props) {
   return (
-    <View style={styles.container}>
-      <Image
-        source={{uri: education.logoUrl}}
-        style={styles.logo}
-        resizeMode="cover"
-      />
-      <View style={styles.details}>
-        <Text style={styles.school}>{education.school}</Text>
-        <Text style={styles.degree}>
-          {education.degree} · {education.field}
-        </Text>
-        <Text style={styles.years}>
-          {education.startYear} – {education.endYear}
-        </Text>
+    <View>
+      <View style={styles.container}>
+        <CompanyLogo
+          slug={education.logoSlug}
+          name={education.school}
+          size={48}
+          rounded={4}
+        />
+        <View style={styles.details}>
+          <Text style={styles.school}>{education.school}</Text>
+          <Text style={styles.degree}>
+            {education.degree} · {education.field}
+          </Text>
+          <Text style={styles.years}>
+            {education.startYear} – {education.endYear}
+          </Text>
+        </View>
       </View>
+      {!isLast && <HairlineDivider />}
     </View>
   );
 }
@@ -34,18 +41,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.lg,
     paddingVertical: 12,
   },
-  logo: {
-    width: 48,
-    height: 48,
-    borderRadius: 4,
-    marginRight: 12,
-  },
   details: {
     flex: 1,
+    marginLeft: 12,
   },
   school: {
     fontSize: Typography.md,
-    ...Typography.semibold,
+    fontWeight: '600',
     color: Colors.textPrimary,
   },
   degree: {
@@ -54,7 +56,7 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   years: {
-    fontSize: Typography.xs,
+    fontSize: Typography.sm,
     color: Colors.textTertiary,
     marginTop: 2,
   },

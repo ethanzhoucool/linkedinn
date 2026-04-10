@@ -3,6 +3,7 @@ export interface Job {
   title: string;
   company: string;
   companyLogoUrl: string;
+  logoSlug: string;
   location: string;
   postedAt: string;
   applicants: number;
@@ -17,6 +18,7 @@ export const mockJobs: Job[] = [
     title: 'Senior Product Engineer',
     company: 'Figma',
     companyLogoUrl: 'https://logo.clearbit.com/figma.com',
+    logoSlug: 'figma',
     location: 'San Francisco, CA',
     postedAt: '2d',
     applicants: 87,
@@ -29,6 +31,7 @@ export const mockJobs: Job[] = [
     title: 'Payments Infrastructure Engineer',
     company: 'Stripe',
     companyLogoUrl: 'https://logo.clearbit.com/stripe.com',
+    logoSlug: 'stripe',
     location: 'Seattle, WA',
     postedAt: '3d',
     applicants: 124,
@@ -41,6 +44,7 @@ export const mockJobs: Job[] = [
     title: 'Data Engineer II',
     company: 'Notion',
     companyLogoUrl: 'https://logo.clearbit.com/notion.so',
+    logoSlug: 'notion',
     location: 'Remote',
     postedAt: '1d',
     applicants: 56,
@@ -53,6 +57,7 @@ export const mockJobs: Job[] = [
     title: 'Staff Backend Engineer',
     company: 'Vercel',
     companyLogoUrl: 'https://logo.clearbit.com/vercel.com',
+    logoSlug: 'vercel',
     location: 'Austin, TX',
     postedAt: '5d',
     applicants: 203,
@@ -65,6 +70,7 @@ export const mockJobs: Job[] = [
     title: 'ML Platform Engineer',
     company: 'Anthropic',
     companyLogoUrl: 'https://logo.clearbit.com/anthropic.com',
+    logoSlug: 'anthropic',
     location: 'New York, NY',
     postedAt: '1w',
     applicants: 341,
@@ -77,6 +83,7 @@ export const mockJobs: Job[] = [
     title: 'Frontend Engineer, Consumer',
     company: 'Linear',
     companyLogoUrl: 'https://logo.clearbit.com/linear.app',
+    logoSlug: 'linear',
     location: 'Seattle, WA',
     postedAt: '4d',
     applicants: 78,
@@ -89,6 +96,7 @@ export const mockJobs: Job[] = [
     title: 'Principal Systems Engineer',
     company: 'Airbnb',
     companyLogoUrl: 'https://logo.clearbit.com/airbnb.com',
+    logoSlug: 'airbnb',
     location: 'Chicago, IL',
     postedAt: '2w',
     applicants: 167,
@@ -101,6 +109,7 @@ export const mockJobs: Job[] = [
     title: 'Cloud Infrastructure Engineer',
     company: 'Shopify',
     companyLogoUrl: 'https://logo.clearbit.com/shopify.com',
+    logoSlug: 'shopify',
     location: 'Remote',
     postedAt: '6d',
     applicants: 112,
@@ -113,6 +122,7 @@ export const mockJobs: Job[] = [
     title: 'iOS Growth Engineer',
     company: 'Duolingo',
     companyLogoUrl: 'https://logo.clearbit.com/duolingo.com',
+    logoSlug: 'duolingo',
     location: 'Pittsburgh, PA',
     postedAt: '3d',
     applicants: 45,
@@ -123,8 +133,9 @@ export const mockJobs: Job[] = [
   {
     id: 'job-10',
     title: 'Senior Full Stack Engineer',
-    company: 'Spotify',
-    companyLogoUrl: 'https://logo.clearbit.com/spotify.com',
+    company: 'GitHub',
+    companyLogoUrl: 'https://logo.clearbit.com/github.com',
+    logoSlug: 'github',
     location: 'Los Angeles, CA',
     postedAt: '1w',
     applicants: 289,

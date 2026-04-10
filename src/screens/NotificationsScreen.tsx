@@ -126,8 +126,9 @@ const styles = StyleSheet.create({
   },
   pill: {
     paddingHorizontal: 14,
-    paddingVertical: 6,
-    borderRadius: 16,
+    height: 36,
+    borderRadius: 20,
+    justifyContent: 'center',
   },
   pillSelected: {
     backgroundColor: Colors.primary,

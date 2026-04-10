@@ -6,6 +6,7 @@ export interface PostAuthor {
   isFollowing: boolean;
   connectionDegree: '1st' | '2nd' | '3rd';
   verified: boolean;
+  logoSlug?: string;
 }
 
 export interface Post {
@@ -32,6 +33,7 @@ export const mockPosts: Post[] = [
       isFollowing: false,
       connectionDegree: '1st',
       verified: true,
+      logoSlug: 'figma',
     },
     timestamp: '2h',
     content:
@@ -52,6 +54,7 @@ export const mockPosts: Post[] = [
       isFollowing: true,
       connectionDegree: '1st',
       verified: false,
+      logoSlug: 'stripe',
     },
     timestamp: '5h',
     content:
@@ -72,6 +75,7 @@ export const mockPosts: Post[] = [
       isFollowing: false,
       connectionDegree: '2nd',
       verified: false,
+      logoSlug: 'notion',
     },
     timestamp: '1d',
     content:
@@ -91,6 +95,7 @@ export const mockPosts: Post[] = [
       isFollowing: false,
       connectionDegree: '2nd',
       verified: true,
+      logoSlug: 'linear',
     },
     timestamp: '1d',
     content:
@@ -112,6 +117,7 @@ export const mockPosts: Post[] = [
       isFollowing: true,
       connectionDegree: '1st',
       verified: false,
+      logoSlug: 'airbnb',
     },
     timestamp: '2d',
     content:
@@ -131,6 +137,7 @@ export const mockPosts: Post[] = [
       isFollowing: false,
       connectionDegree: '2nd',
       verified: false,
+      logoSlug: 'spotify',
     },
     timestamp: '2d',
     content:
@@ -150,6 +157,7 @@ export const mockPosts: Post[] = [
       isFollowing: false,
       connectionDegree: '3rd',
       verified: false,
+      logoSlug: 'anthropic',
     },
     timestamp: '3d',
     content:
@@ -170,6 +178,7 @@ export const mockPosts: Post[] = [
       isFollowing: true,
       connectionDegree: '1st',
       verified: false,
+      logoSlug: 'vercel',
     },
     timestamp: '3d',
     content:
@@ -189,6 +198,7 @@ export const mockPosts: Post[] = [
       isFollowing: false,
       connectionDegree: '2nd',
       verified: true,
+      logoSlug: 'shopify',
     },
     timestamp: '4d',
     content:
@@ -208,6 +218,7 @@ export const mockPosts: Post[] = [
       isFollowing: false,
       connectionDegree: '3rd',
       verified: false,
+      logoSlug: 'canva',
     },
     timestamp: '5d',
     content:
@@ -227,6 +238,7 @@ export const mockPosts: Post[] = [
       isFollowing: true,
       connectionDegree: '1st',
       verified: false,
+      logoSlug: 'figma',
     },
     timestamp: '6d',
     content:
@@ -247,6 +259,7 @@ export const mockPosts: Post[] = [
       isFollowing: false,
       connectionDegree: '2nd',
       verified: false,
+      logoSlug: 'github',
     },
     timestamp: '1w',
     content:

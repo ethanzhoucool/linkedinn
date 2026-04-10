@@ -1,6 +1,5 @@
 import React, {useState, useCallback} from 'react';
 import {
-  Image,
   ScrollView,
   StyleSheet,
   Text,
@@ -15,6 +14,7 @@ import {useApp} from '../store/AppContext';
 import {mockPosts} from '../data/mockPosts';
 import {suggestedPeople} from '../data/mockConnections';
 import {Avatar} from '../components/common/Avatar';
+import {CompanyLogo} from '../components/common/CompanyLogo';
 import {IconButton} from '../components/common/IconButton';
 import {Toast, useToast} from '../components/common/Toast';
 import {Colors, Typography, Spacing} from '../theme';
@@ -22,7 +22,7 @@ import {RootStackParamList} from '../navigation/types';
 
 type SearchNavProp = StackNavigationProp<RootStackParamList, 'Search'>;
 
-const RECENT_SEARCHES = [
+const INITIAL_RECENT_SEARCHES = [
   'React Native engineers',
   'Product Manager SF',
   'Aurora Robotics jobs',
@@ -37,6 +37,9 @@ export function SearchScreen() {
   const {state} = useApp();
   const {show, toastProps} = useToast();
   const [query, setQuery] = useState('');
+  const [recentSearches, setRecentSearches] = useState<string[]>(
+    INITIAL_RECENT_SEARCHES,
+  );
 
   const q = query.trim().toLowerCase();
   const hasQuery = q !== '';
@@ -77,6 +80,16 @@ export function SearchScreen() {
     navigation.goBack();
   }, [navigation]);
 
+  const handleRemoveRecent = (term: string) => {
+    setRecentSearches(prev => prev.filter(t => t !== term));
+    show(`Removed "${term}"`);
+  };
+
+  const handleClearAll = () => {
+    setRecentSearches([]);
+    show('Recent searches cleared');
+  };
+
   return (
     <View
       style={[styles.root, {paddingTop: insets.top}]}
@@ -111,24 +124,40 @@ export function SearchScreen() {
           /* Empty state */
           <>
             {/* Recent searches */}
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Recent searches</Text>
-              {RECENT_SEARCHES.map(term => (
-                <TouchableOpacity
-                  key={term}
-                  style={styles.recentRow}
-                  activeOpacity={0.7}
-                  onPress={() => show(`Searching: ${term}`)}>
-                  <IconButton
-                    name="history"
-                    onPress={() => {}}
-                    size={20}
-                    color={Colors.textTertiary}
-                  />
-                  <Text style={styles.recentText}>{term}</Text>
-                </TouchableOpacity>
-              ))}
-            </View>
+            {recentSearches.length > 0 && (
+              <View style={styles.section}>
+                <View style={styles.sectionHeader}>
+                  <Text style={styles.sectionTitle}>Recent searches</Text>
+                  <TouchableOpacity
+                    onPress={handleClearAll}
+                    activeOpacity={0.7}>
+                    <Text style={styles.clearAll}>Clear all</Text>
+                  </TouchableOpacity>
+                </View>
+                {recentSearches.map(term => (
+                  <View key={term} style={styles.recentRow}>
+                    <IconButton
+                      name="history"
+                      onPress={() => {}}
+                      size={20}
+                      color={Colors.textTertiary}
+                    />
+                    <TouchableOpacity
+                      style={styles.recentTextTouchable}
+                      activeOpacity={0.7}
+                      onPress={() => show(`Searching: ${term}`)}>
+                      <Text style={styles.recentText}>{term}</Text>
+                    </TouchableOpacity>
+                    <IconButton
+                      name="close"
+                      onPress={() => handleRemoveRecent(term)}
+                      size={18}
+                      color={Colors.textTertiary}
+                    />
+                  </View>
+                ))}
+              </View>
+            )}
 
             {/* Try searching for */}
             <View style={styles.section}>
@@ -167,7 +196,7 @@ export function SearchScreen() {
                     <View style={styles.resultInfo}>
                       <Text style={styles.resultName}>{person.name}</Text>
                       <Text style={styles.resultSub} numberOfLines={1}>
-                        {person.headline}
+                        {person.headline} · <Text style={styles.degree}>1st</Text>
                       </Text>
                     </View>
                   </TouchableOpacity>
@@ -186,10 +215,11 @@ export function SearchScreen() {
                     style={styles.resultRow}
                     activeOpacity={0.7}
                     onPress={() => show(`${job.title} at ${job.company}`)}>
-                    <Image
-                      source={{uri: job.companyLogoUrl}}
-                      style={styles.jobLogo}
-                      resizeMode="cover"
+                    <CompanyLogo
+                      slug={job.logoSlug}
+                      name={job.company}
+                      size={48}
+                      rounded={4}
                     />
                     <View style={styles.resultInfo}>
                       <Text style={styles.resultName}>{job.title}</Text>
@@ -276,13 +306,22 @@ const styles = StyleSheet.create({
     marginTop: 8,
     paddingBottom: 4,
   },
+  sectionHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: Spacing.lg,
+    paddingTop: Spacing.md,
+    paddingBottom: Spacing.sm,
+  },
   sectionTitle: {
     fontSize: Typography.md,
     ...Typography.semibold,
     color: Colors.textPrimary,
-    paddingHorizontal: Spacing.lg,
-    paddingTop: Spacing.md,
-    paddingBottom: Spacing.sm,
+  },
+  clearAll: {
+    fontSize: Typography.sm,
+    color: Colors.textSecondary,
   },
   recentRow: {
     flexDirection: 'row',
@@ -290,6 +329,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.lg,
     paddingVertical: 10,
     gap: 12,
+  },
+  recentTextTouchable: {
+    flex: 1,
   },
   recentText: {
     fontSize: Typography.base,
@@ -303,9 +345,10 @@ const styles = StyleSheet.create({
   pill: {
     borderWidth: 1,
     borderColor: Colors.primary,
-    borderRadius: 16,
+    borderRadius: 18,
     paddingHorizontal: 14,
-    paddingVertical: 6,
+    height: 36,
+    justifyContent: 'center',
   },
   pillText: {
     fontSize: Typography.sm,
@@ -332,10 +375,9 @@ const styles = StyleSheet.create({
     color: Colors.textTertiary,
     marginTop: 2,
   },
-  jobLogo: {
-    width: 48,
-    height: 48,
-    borderRadius: 4,
+  degree: {
+    fontSize: Typography.xs,
+    color: Colors.textTertiary,
   },
   noResults: {
     padding: Spacing.xl,

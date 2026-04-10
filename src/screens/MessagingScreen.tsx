@@ -9,11 +9,13 @@ import {
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useNavigation} from '@react-navigation/native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import {RootStackParamList} from '../navigation/types';
 import {useApp} from '../store/AppContext';
 import {Conversation} from '../data/mockConversations';
 import {Colors, Typography} from '../theme';
 import {IconButton} from '../components/common/IconButton';
+import {Avatar} from '../components/common/Avatar';
 import {ConversationRow} from '../components/messaging/ConversationRow';
 import {Toast, useToast} from '../components/common/Toast';
 
@@ -27,6 +29,7 @@ export function MessagingScreen() {
   const {state} = useApp();
   const {show, toastProps} = useToast();
   const [activeTab, setActiveTab] = useState<TabName>('Focused');
+  const [bannerVisible, setBannerVisible] = useState(true);
 
   const conversations = state.conversations;
 
@@ -50,17 +53,21 @@ export function MessagingScreen() {
           size={24}
           color={Colors.textPrimary}
         />
+        <Avatar
+          uri={state.currentUser.avatarUrl}
+          size={32}
+        />
         <Text style={styles.headerTitle}>Messaging</Text>
         <View style={styles.headerRight}>
           <IconButton
-            name="edit"
+            name="more-horiz"
             onPress={() => show('Coming soon')}
             size={24}
             color={Colors.textPrimary}
             style={styles.headerIcon}
           />
           <IconButton
-            name="filter-list"
+            name="edit"
             onPress={() => show('Coming soon')}
             size={24}
             color={Colors.textPrimary}
@@ -72,7 +79,8 @@ export function MessagingScreen() {
       <TouchableOpacity
         style={styles.searchPill}
         activeOpacity={0.7}
-        onPress={() => navigation.navigate('Search')}>
+        onPress={() => show('Search coming soon')}>
+        <Icon name="search" size={18} color={Colors.textTertiary} style={styles.searchIcon} />
         <Text style={styles.searchText}>Search messages</Text>
       </TouchableOpacity>
 
@@ -96,6 +104,20 @@ export function MessagingScreen() {
           </TouchableOpacity>
         ))}
       </View>
+
+      {/* Unread banner */}
+      {bannerVisible && (
+        <View style={styles.banner}>
+          <Text style={styles.bannerText} numberOfLines={1}>
+            You have 12 unread messages. Turn on notifications
+          </Text>
+          <TouchableOpacity
+            hitSlop={{top: 8, bottom: 8, left: 8, right: 8}}
+            onPress={() => setBannerVisible(false)}>
+            <Icon name="close" size={16} color={Colors.gray700} />
+          </TouchableOpacity>
+        </View>
+      )}
 
       {/* Conversation list */}
       <FlatList
@@ -121,30 +143,35 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 12,
     paddingBottom: 8,
+    gap: 8,
     backgroundColor: Colors.card,
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: Colors.border,
   },
   headerTitle: {
     flex: 1,
-    fontSize: Typography.xl,
-    fontWeight: '600',
+    fontSize: Typography.xxl,
+    fontWeight: '700',
     color: Colors.textPrimary,
-    marginLeft: 8,
   },
   headerRight: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   headerIcon: {
-    marginRight: 12,
+    marginRight: 8,
   },
   searchPill: {
+    flexDirection: 'row',
+    alignItems: 'center',
     margin: 12,
     backgroundColor: Colors.gray100,
     borderRadius: 20,
-    paddingHorizontal: 16,
+    paddingHorizontal: 12,
     paddingVertical: 10,
+  },
+  searchIcon: {
+    marginRight: 6,
   },
   searchText: {
     fontSize: Typography.base,
@@ -159,21 +186,36 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     paddingVertical: 12,
-    borderBottomWidth: 2,
+    borderBottomWidth: 3,
     borderBottomColor: 'transparent',
   },
   tabActive: {
-    borderBottomColor: Colors.textPrimary,
+    borderBottomColor: Colors.primary,
   },
   tabText: {
     fontSize: Typography.base,
     fontWeight: '600',
   },
   tabTextActive: {
-    color: Colors.textPrimary,
+    color: Colors.primary,
   },
   tabTextInactive: {
     color: Colors.textSecondary,
+  },
+  banner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FEF9C3',
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: '#FDE68A',
+  },
+  bannerText: {
+    flex: 1,
+    fontSize: Typography.xs,
+    color: Colors.gray700,
+    marginRight: 8,
   },
   list: {
     flex: 1,

@@ -1,5 +1,6 @@
 import React from 'react';
-import {StyleSheet, TextInput, View} from 'react-native';
+import {StyleSheet, TextInput, TouchableOpacity, View} from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import {Colors, Typography} from '../../theme';
 import {IconButton} from '../common/IconButton';
 import {Toast, useToast} from '../common/Toast';
@@ -16,6 +17,35 @@ export function MessageInput({value, onChangeText, onSend}: Props) {
 
   return (
     <View style={styles.wrapper}>
+      {/* Action icons row */}
+      <View style={styles.actionsRow}>
+        <TouchableOpacity
+          style={styles.actionBtn}
+          onPress={() => show('Coming soon')}
+          hitSlop={{top: 6, bottom: 6, left: 6, right: 6}}>
+          <Icon name="mic" size={22} color={Colors.textSecondary} />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.actionBtn}
+          onPress={() => show('Coming soon')}
+          hitSlop={{top: 6, bottom: 6, left: 6, right: 6}}>
+          <Icon name="gif" size={22} color={Colors.textSecondary} />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.actionBtn}
+          onPress={() => show('Coming soon')}
+          hitSlop={{top: 6, bottom: 6, left: 6, right: 6}}>
+          <Icon name="image" size={22} color={Colors.textSecondary} />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.actionBtn}
+          onPress={() => show('Coming soon')}
+          hitSlop={{top: 6, bottom: 6, left: 6, right: 6}}>
+          <Icon name="emoji-emotions" size={22} color={Colors.textSecondary} />
+        </TouchableOpacity>
+      </View>
+
+      {/* Input row */}
       <View style={styles.container}>
         <IconButton
           name="attach-file"
@@ -52,6 +82,16 @@ const styles = StyleSheet.create({
     borderTopWidth: StyleSheet.hairlineWidth,
     borderTopColor: Colors.border,
     backgroundColor: Colors.card,
+  },
+  actionsRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 12,
+    paddingTop: 8,
+    paddingBottom: 2,
+  },
+  actionBtn: {
+    marginRight: 16,
   },
   container: {
     flexDirection: 'row',

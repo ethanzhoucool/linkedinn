@@ -43,8 +43,33 @@ export function PostCard({
   const shouldTruncate = isLong && !expanded;
   const showContext = !!post.contextHeader && !contextDismissed;
 
-  const reactionCounts = {like: post.reactions};
-  const totalLabel = `${formatCount(post.reactions)} reactions`;
+  // Seed 2-3 reaction types per post based on the numeric suffix of its id
+  // so different posts show different reaction mixes.
+  const seed = parseInt(post.id.replace(/\D/g, ''), 10) || 0;
+  const REACTION_MIXES: Array<Array<'like' | 'celebrate' | 'love' | 'insightful'>> = [
+    ['like', 'celebrate', 'love'],
+    ['like', 'love', 'insightful'],
+    ['like', 'celebrate', 'insightful'],
+    ['like', 'celebrate'],
+    ['like', 'love'],
+  ];
+  const mix = REACTION_MIXES[seed % REACTION_MIXES.length];
+  const reactionCounts: {
+    like?: number;
+    celebrate?: number;
+    love?: number;
+    insightful?: number;
+  } = {};
+  mix.forEach((key, idx) => {
+    // Main reaction type gets ~60% of total, others share the rest.
+    const share = idx === 0 ? 0.6 : 0.4 / (mix.length - 1);
+    reactionCounts[key] = Math.max(1, Math.round(post.reactions * share));
+  });
+  const othersCount = Math.max(0, post.reactions - 1);
+  const totalLabel =
+    othersCount > 0
+      ? `${post.author.name} and ${formatCount(othersCount)} others`
+      : post.author.name;
 
   return (
     <View
@@ -151,13 +176,17 @@ export function PostCard({
 
       {/* Reaction count row */}
       <View style={styles.reactionCountRow}>
-        <ReactionStack
-          counts={reactionCounts}
-          totalLabel={totalLabel}
-        />
-        <Text style={styles.commentsText}>
-          {post.comments > 0 ? `${formatCount(post.comments)} comments` : ''}
-        </Text>
+        <View style={styles.reactionCountLeft}>
+          <ReactionStack
+            counts={reactionCounts}
+            totalLabel={totalLabel}
+          />
+        </View>
+        {post.comments > 0 && (
+          <Text style={styles.commentsText}>
+            {`${formatCount(post.comments)} comments`}
+          </Text>
+        )}
       </View>
 
       <HairlineDivider />
@@ -282,8 +311,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 8,
   },
+  reactionCountLeft: {
+    flex: 1,
+    flexShrink: 1,
+    marginRight: 8,
+  },
   commentsText: {
     fontSize: 12,
     color: Colors.textTertiary,
+    marginLeft: 'auto',
   },
 });

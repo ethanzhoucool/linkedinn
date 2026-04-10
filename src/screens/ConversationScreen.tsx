@@ -5,6 +5,7 @@ import {
   Platform,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -83,8 +84,10 @@ export function ConversationScreen() {
                 <Text style={styles.headerName} numberOfLines={1}>
                   {conversation.person.name}
                 </Text>
-                {conversation.online && (
-                  <Text style={styles.headerStatus}>Active now</Text>
+                {conversation.online ? (
+                  <Text style={styles.headerStatusOnline}>Active now</Text>
+                ) : (
+                  <Text style={styles.headerStatusOffline}>Last active 2h ago</Text>
                 )}
               </View>
             </View>
@@ -106,6 +109,37 @@ export function ConversationScreen() {
           </View>
         </View>
 
+        {/* Profile card */}
+        {conversation && (
+          <View style={styles.profileCard}>
+            <Avatar
+              uri={conversation.person.avatarUrl}
+              size={80}
+              online={conversation.online}
+            />
+            <Text style={styles.profileName}>{conversation.person.name}</Text>
+            <Text style={styles.profileHeadline} numberOfLines={2}>
+              {conversation.person.headline}
+            </Text>
+            <View style={styles.profileActions}>
+              <TouchableOpacity onPress={() => show('Coming soon')}>
+                <Text style={styles.profileActionText}>Message</Text>
+              </TouchableOpacity>
+              <Text style={styles.profileActionDot}> · </Text>
+              <TouchableOpacity onPress={() => show('Coming soon')}>
+                <Text style={styles.profileActionText}>Connect</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        )}
+
+        {/* Date divider */}
+        <View style={styles.dateDivider}>
+          <View style={styles.dateDividerLine} />
+          <Text style={styles.dateDividerText}>Today</Text>
+          <View style={styles.dateDividerLine} />
+        </View>
+
         {/* Messages */}
         <FlatList
           data={reversedMessages}
@@ -122,6 +156,7 @@ export function ConversationScreen() {
           onChangeText={setInputText}
           onSend={handleSend}
         />
+        <View style={{height: insets.bottom}} />
       </View>
       <Toast {...toastProps} />
     </KeyboardAvoidingView>
@@ -160,7 +195,11 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: Colors.textPrimary,
   },
-  headerStatus: {
+  headerStatusOnline: {
+    fontSize: 11,
+    color: Colors.success,
+  },
+  headerStatusOffline: {
     fontSize: 11,
     color: Colors.textTertiary,
   },
@@ -170,6 +209,58 @@ const styles = StyleSheet.create({
   },
   headerIcon: {
     marginRight: 12,
+  },
+  profileCard: {
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 16,
+    marginVertical: 8,
+    backgroundColor: Colors.card,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: Colors.border,
+  },
+  profileName: {
+    fontSize: Typography.xl,
+    fontWeight: '700',
+    color: Colors.textPrimary,
+    marginTop: 10,
+    textAlign: 'center',
+  },
+  profileHeadline: {
+    fontSize: Typography.base,
+    color: Colors.textSecondary,
+    marginTop: 4,
+    textAlign: 'center',
+  },
+  profileActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  profileActionText: {
+    fontSize: Typography.sm,
+    color: Colors.primary,
+    fontWeight: '600',
+  },
+  profileActionDot: {
+    fontSize: Typography.sm,
+    color: Colors.textTertiary,
+  },
+  dateDivider: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+  },
+  dateDividerLine: {
+    flex: 1,
+    height: StyleSheet.hairlineWidth,
+    backgroundColor: Colors.border,
+  },
+  dateDividerText: {
+    fontSize: 11,
+    color: Colors.textTertiary,
+    marginHorizontal: 8,
   },
   list: {
     flex: 1,

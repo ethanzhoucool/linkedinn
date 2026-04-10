@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import {CurrentUser} from '../../data/mockCurrentUser';
 import {Colors, Typography} from '../../theme';
 import {Avatar} from '../common/Avatar';
@@ -17,13 +18,12 @@ interface Props {
   onChangeText: (t: string) => void;
 }
 
-const TOOLBAR_ICONS = [
-  'photo-library',
-  'videocam',
-  'event',
-  'article',
-  'poll',
-  'more-horiz',
+const TOOLBAR_ICONS: Array<{name: string; color: string}> = [
+  {name: 'photo-library', color: '#057642'},
+  {name: 'videocam', color: Colors.primary},
+  {name: 'event', color: '#E7A33E'},
+  {name: 'edit', color: '#915907'},
+  {name: 'poll', color: '#057642'},
 ];
 
 export function PostComposerBody({currentUser, value, onChangeText}: Props) {
@@ -37,7 +37,7 @@ export function PostComposerBody({currentUser, value, onChangeText}: Props) {
         <View style={styles.userInfo}>
           <Text style={styles.userName}>{currentUser.name}</Text>
           <TouchableOpacity style={styles.audiencePill} activeOpacity={0.7}>
-            <Text style={styles.audienceText}>Post to: Anyone ▾</Text>
+            <Text style={styles.audienceText}>Anyone ▾</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -49,7 +49,7 @@ export function PostComposerBody({currentUser, value, onChangeText}: Props) {
         value={value}
         onChangeText={onChangeText}
         placeholder="What do you want to talk about?"
-        placeholderTextColor={Colors.textTertiary}
+        placeholderTextColor={Colors.textSecondary}
         multiline
         autoFocus
         textAlignVertical="top"
@@ -60,11 +60,13 @@ export function PostComposerBody({currentUser, value, onChangeText}: Props) {
       <View style={styles.toolbar}>
         {TOOLBAR_ICONS.map(icon => (
           <TouchableOpacity
-            key={icon}
+            key={icon.name}
             onPress={() => show('Coming soon')}
             activeOpacity={0.7}
             style={styles.toolbarButton}>
-            <Text style={styles.toolbarIcon}>{getIconChar(icon)}</Text>
+            <View style={styles.toolbarIconCircle}>
+              <Icon name={icon.name} size={18} color={icon.color} />
+            </View>
           </TouchableOpacity>
         ))}
       </View>
@@ -74,18 +76,6 @@ export function PostComposerBody({currentUser, value, onChangeText}: Props) {
   );
 }
 
-function getIconChar(name: string): string {
-  const map: Record<string, string> = {
-    'photo-library': '🖼',
-    videocam: '📷',
-    event: '📅',
-    article: '📄',
-    poll: '📊',
-    'more-horiz': '•••',
-  };
-  return map[name] ?? '•';
-}
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -93,7 +83,7 @@ const styles = StyleSheet.create({
   userRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 12,
+    paddingHorizontal: 16,
     paddingVertical: 12,
   },
   userInfo: {
@@ -109,7 +99,7 @@ const styles = StyleSheet.create({
   audiencePill: {
     borderWidth: 1,
     borderColor: Colors.borderStrong,
-    borderRadius: 12,
+    borderRadius: 16,
     paddingHorizontal: 10,
     paddingVertical: 4,
     alignSelf: 'flex-start',
@@ -122,23 +112,27 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 18,
     color: Colors.textPrimary,
-    paddingHorizontal: 12,
+    paddingHorizontal: 16,
     paddingVertical: 12,
     minHeight: 120,
   },
   toolbar: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 8,
-    paddingVertical: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 12,
     borderTopWidth: StyleSheet.hairlineWidth,
     borderTopColor: Colors.border,
   },
   toolbarButton: {
-    padding: 8,
-    marginHorizontal: 2,
+    marginHorizontal: 4,
   },
-  toolbarIcon: {
-    fontSize: 18,
+  toolbarIconCircle: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: Colors.gray100,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

@@ -11,19 +11,25 @@ export function AboutSection({text}: Props) {
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <View style={styles.card}>
+    <View style={styles.card} testID="profile-section-about">
       <View style={styles.headerRow}>
         <Text style={styles.title}>About</Text>
-        <IconButton
-          name="more-horiz"
-          onPress={() => {}}
-          size={22}
-          color={Colors.textSecondary}
-        />
+        <View style={styles.headerActions}>
+          <IconButton
+            name="edit"
+            onPress={() => {}}
+            size={22}
+            color={Colors.textSecondary}
+          />
+          <IconButton
+            name="more-horiz"
+            onPress={() => {}}
+            size={22}
+            color={Colors.textSecondary}
+          />
+        </View>
       </View>
-      <Text
-        style={styles.body}
-        numberOfLines={expanded ? undefined : 4}>
+      <Text style={styles.body} numberOfLines={expanded ? undefined : 4}>
         {text}
       </Text>
       {!expanded && (
@@ -38,7 +44,9 @@ export function AboutSection({text}: Props) {
 const styles = StyleSheet.create({
   card: {
     backgroundColor: Colors.card,
-    padding: Spacing.lg,
+    paddingHorizontal: Spacing.lg,
+    paddingTop: Spacing.lg,
+    paddingBottom: Spacing.lg,
   },
   headerRow: {
     flexDirection: 'row',
@@ -48,8 +56,12 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: Typography.xl,
-    ...Typography.semibold,
+    fontWeight: '700',
     color: Colors.textPrimary,
+  },
+  headerActions: {
+    flexDirection: 'row',
+    gap: 4,
   },
   body: {
     fontSize: Typography.base,

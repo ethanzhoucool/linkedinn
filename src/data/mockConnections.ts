@@ -7,6 +7,7 @@ export interface Person {
   verified?: boolean;
   company?: string;
   companyLogoUrl?: string;
+  logoSlug?: string;
 }
 
 export const suggestedPeople: Person[] = [
@@ -18,6 +19,7 @@ export const suggestedPeople: Person[] = [
     mutualConnections: 12,
     company: 'Figma',
     companyLogoUrl: 'https://logo.clearbit.com/figma.com',
+    logoSlug: 'figma',
   },
   {
     id: 'person-2',
@@ -28,6 +30,7 @@ export const suggestedPeople: Person[] = [
     verified: true,
     company: 'Stripe',
     companyLogoUrl: 'https://logo.clearbit.com/stripe.com',
+    logoSlug: 'stripe',
   },
   {
     id: 'person-3',
@@ -37,6 +40,7 @@ export const suggestedPeople: Person[] = [
     mutualConnections: 45,
     company: 'Spotify',
     companyLogoUrl: 'https://logo.clearbit.com/spotify.com',
+    logoSlug: 'spotify',
   },
   {
     id: 'person-4',
@@ -46,6 +50,7 @@ export const suggestedPeople: Person[] = [
     mutualConnections: 3,
     company: 'Airbnb',
     companyLogoUrl: 'https://logo.clearbit.com/airbnb.com',
+    logoSlug: 'airbnb',
   },
   {
     id: 'person-5',
@@ -56,6 +61,7 @@ export const suggestedPeople: Person[] = [
     verified: true,
     company: 'Anthropic',
     companyLogoUrl: 'https://logo.clearbit.com/anthropic.com',
+    logoSlug: 'anthropic',
   },
   {
     id: 'person-6',
@@ -65,6 +71,7 @@ export const suggestedPeople: Person[] = [
     mutualConnections: 31,
     company: 'Notion',
     companyLogoUrl: 'https://logo.clearbit.com/notion.so',
+    logoSlug: 'notion',
   },
   {
     id: 'person-7',
@@ -74,6 +81,7 @@ export const suggestedPeople: Person[] = [
     mutualConnections: 9,
     company: 'Shopify',
     companyLogoUrl: 'https://logo.clearbit.com/shopify.com',
+    logoSlug: 'shopify',
   },
   {
     id: 'person-8',
@@ -83,6 +91,7 @@ export const suggestedPeople: Person[] = [
     mutualConnections: 22,
     company: 'Linear',
     companyLogoUrl: 'https://logo.clearbit.com/linear.app',
+    logoSlug: 'linear',
   },
   {
     id: 'person-9',
@@ -92,6 +101,7 @@ export const suggestedPeople: Person[] = [
     mutualConnections: 14,
     company: 'GitHub',
     companyLogoUrl: 'https://logo.clearbit.com/github.com',
+    logoSlug: 'github',
   },
   {
     id: 'person-10',
@@ -101,5 +111,6 @@ export const suggestedPeople: Person[] = [
     mutualConnections: 6,
     company: 'Canva',
     companyLogoUrl: 'https://logo.clearbit.com/canva.com',
+    logoSlug: 'canva',
   },
 ];

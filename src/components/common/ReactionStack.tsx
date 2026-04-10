@@ -135,7 +135,9 @@ export function ReactionStack({counts, totalLabel}: Props) {
         ))}
       </View>
       {totalLabel !== undefined && totalLabel.length > 0 && (
-        <Text style={styles.label}>{totalLabel}</Text>
+        <Text style={styles.label} numberOfLines={1}>
+          {totalLabel}
+        </Text>
       )}
     </View>
   );
@@ -145,6 +147,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
+    flexShrink: 1,
   },
   stack: {
     flexDirection: 'row',
@@ -165,5 +168,6 @@ const styles = StyleSheet.create({
     marginLeft: 6,
     fontSize: 12,
     color: Colors.textTertiary,
+    flexShrink: 1,
   },
 });

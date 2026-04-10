@@ -1,40 +1,32 @@
 import React, {useState} from 'react';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
+import {SvgUri} from 'react-native-svg';
 import {Colors} from '../../theme/colors';
 
 interface Props {
-  uri: string;
+  slug?: string;
+  name: string;
   size?: number;
   rounded?: number;
-  fallbackLetter?: string;
 }
 
 const FALLBACK_COLORS = [
-  '#0A66C2',
-  '#057642',
-  '#915907',
-  '#6DAE4F',
-  '#DF704D',
-  '#8B5CF6',
+  Colors.primary,
+  Colors.celebrate,
+  Colors.love,
+  Colors.insightful,
+  Colors.primaryDark,
 ];
 
-function pickFallbackColor(seed: string): string {
-  let hash = 0;
-  for (let i = 0; i < seed.length; i += 1) {
-    hash = (hash + seed.charCodeAt(i)) % FALLBACK_COLORS.length;
-  }
-  return FALLBACK_COLORS[hash];
-}
+export function CompanyLogo({slug, name, size = 48, rounded = 6}: Props) {
+  const [failed, setFailed] = useState(false);
 
-export function CompanyLogo({
-  uri,
-  size = 48,
-  rounded = 4,
-  fallbackLetter,
-}: Props) {
-  const [errored, setErrored] = useState(false);
-  const letter = (fallbackLetter ?? uri.slice(0, 1) ?? '?').toUpperCase();
-  const bgColor = pickFallbackColor(uri);
+  const showSvg = !!slug && !failed;
+  const letter = (name.charAt(0) || '?').toUpperCase();
+  const bgIdx = name.charCodeAt(0) % FALLBACK_COLORS.length;
+  const bgColor = FALLBACK_COLORS[bgIdx];
+
+  const inset = Math.round(size * 0.72);
 
   return (
     <View
@@ -44,18 +36,18 @@ export function CompanyLogo({
           width: size,
           height: size,
           borderRadius: rounded,
-          backgroundColor: errored ? bgColor : Colors.gray100,
+          backgroundColor: showSvg ? Colors.card : bgColor,
         },
       ]}>
-      {errored ? (
-        <Text style={[styles.letter, {fontSize: size * 0.44}]}>{letter}</Text>
-      ) : (
-        <Image
-          source={{uri}}
-          style={{width: size, height: size, borderRadius: rounded}}
-          resizeMode="contain"
-          onError={() => setErrored(true)}
+      {showSvg ? (
+        <SvgUri
+          uri={`https://cdn.simpleicons.org/${slug}`}
+          width={inset}
+          height={inset}
+          onError={() => setFailed(true)}
         />
+      ) : (
+        <Text style={[styles.letter, {fontSize: size * 0.44}]}>{letter}</Text>
       )}
     </View>
   );
@@ -63,9 +55,11 @@ export function CompanyLogo({
 
 const styles = StyleSheet.create({
   container: {
-    overflow: 'hidden',
     alignItems: 'center',
     justifyContent: 'center',
+    overflow: 'hidden',
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: Colors.border,
   },
   letter: {
     color: Colors.white,
