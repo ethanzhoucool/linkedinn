@@ -1,0 +1,69 @@
+name: Build iOS Simulator & Upload to Revyl
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install JS dependencies
+        run: npm ci
+
+      - name: Install CocoaPods dependencies
+        run: |
+          cd ios
+          pod install
+
+      - name: Build simulator app
+        run: |
+          xcodebuild \
+            -workspace ios/linkedinn.xcworkspace \
+            -scheme linkedinn \
+            -configuration Release \
+            -sdk iphonesimulator \
+            -destination 'generic/platform=iOS Simulator' \
+            -derivedDataPath build \
+            CODE_SIGNING_ALLOWED=NO \
+            ONLY_ACTIVE_ARCH=NO
+
+      - name: Zip .app bundle
+        run: |
+          APP_PATH=$(find build -name "*.app" -type d | head -1)
+          if [ -z "$APP_PATH" ]; then
+            echo "ERROR: no .app bundle found under build/"
+            exit 1
+          fi
+          cd "$(dirname "$APP_PATH")"
+          zip -r "$GITHUB_WORKSPACE/LinkedInn-simulator.zip" "$(basename "$APP_PATH")"
+          ls -lh "$GITHUB_WORKSPACE/LinkedInn-simulator.zip"
+
+      - name: Upload GitHub artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: LinkedInn-simulator
+          path: LinkedInn-simulator.zip
+
+      - name: Install Revyl CLI
+        run: brew install RevylAI/tap/revyl
+
+      - name: Upload build to Revyl
+        env:
+          REVYL_API_KEY: ${{ secrets.REVYL_API_KEY }}
+        run: |
+          revyl build upload \
+            --file ./LinkedInn-simulator.zip \
+            --name "LinkedInn" \
+            --version "main-${GITHUB_SHA::7}" \
+            --set-current \
+            -y
