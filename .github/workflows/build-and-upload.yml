@@ -64,7 +64,7 @@ jobs:
           revyl build upload \
             --file ./LinkedInn-simulator.zip \
             --platform ios \
-            --name "LinkedInn" \
+            --app 70134646-9245-43d3-9256-66a25e86cb2e \
             --version "main-${GITHUB_SHA::7}" \
             --set-current \
             -y
