@@ -4,13 +4,19 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import type {BottomTabBarButtonProps} from '@react-navigation/bottom-tabs';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {MainTabParamList, RootStackParamList} from './types';
 import {Colors} from '../theme';
 import {FeedScreen} from '../screens/FeedScreen';
 import {NetworkScreen} from '../screens/NetworkScreen';
 import {NotificationsScreen} from '../screens/NotificationsScreen';
 import {JobsScreen} from '../screens/JobsScreen';
+import {
+  HomeIcon,
+  NetworkIcon,
+  PlusSquareIcon,
+  BellIcon,
+  BriefcaseIcon,
+} from '../components/common/icons';
 
 const Tab = createBottomTabNavigator<MainTabParamList>();
 
@@ -61,6 +67,9 @@ export function MainTabNavigator() {
         headerShown: false,
         tabBarActiveTintColor: Colors.primary,
         tabBarInactiveTintColor: Colors.textSecondary,
+        tabBarLabelStyle: {
+          fontSize: 11,
+        },
         tabBarStyle: {
           backgroundColor: Colors.card,
           borderTopColor: Colors.border,
@@ -73,11 +82,11 @@ export function MainTabNavigator() {
         options={{
           tabBarLabel: 'Home',
           tabBarButton: props => <FeedTabButton {...props} />,
-          tabBarIcon: ({focused, color, size}) => (
-            <MaterialIcons
-              name={focused ? 'home' : 'home'}
+          tabBarIcon: ({focused, size}) => (
+            <HomeIcon
               size={size}
-              color={color}
+              filled={focused}
+              color={focused ? Colors.primary : Colors.textSecondary}
             />
           ),
         }}
@@ -88,11 +97,11 @@ export function MainTabNavigator() {
         options={{
           tabBarLabel: 'My Network',
           tabBarButton: props => <NetworkTabButton {...props} />,
-          tabBarIcon: ({focused, color, size}) => (
-            <MaterialIcons
-              name={focused ? 'people' : 'people-outline'}
+          tabBarIcon: ({focused, size}) => (
+            <NetworkIcon
               size={size}
-              color={color}
+              filled={focused}
+              color={focused ? Colors.primary : Colors.textSecondary}
             />
           ),
         }}
@@ -103,8 +112,12 @@ export function MainTabNavigator() {
         options={{
           tabBarLabel: 'Post',
           tabBarButton: props => <PostTabButton {...props} />,
-          tabBarIcon: ({color, size}) => (
-            <MaterialIcons name="add-circle" size={size} color={color} />
+          tabBarIcon: ({size}) => (
+            <PlusSquareIcon
+              size={size}
+              filled={false}
+              color={Colors.textSecondary}
+            />
           ),
         }}
       />
@@ -114,11 +127,11 @@ export function MainTabNavigator() {
         options={{
           tabBarLabel: 'Notifications',
           tabBarButton: props => <NotificationsTabButton {...props} />,
-          tabBarIcon: ({focused, color, size}) => (
-            <MaterialIcons
-              name={focused ? 'notifications' : 'notifications-none'}
+          tabBarIcon: ({focused, size}) => (
+            <BellIcon
               size={size}
-              color={color}
+              filled={focused}
+              color={focused ? Colors.primary : Colors.textSecondary}
             />
           ),
         }}
@@ -129,11 +142,11 @@ export function MainTabNavigator() {
         options={{
           tabBarLabel: 'Jobs',
           tabBarButton: props => <JobsTabButton {...props} />,
-          tabBarIcon: ({focused, color, size}) => (
-            <MaterialIcons
-              name={focused ? 'work' : 'work-outline'}
+          tabBarIcon: ({focused, size}) => (
+            <BriefcaseIcon
               size={size}
-              color={color}
+              filled={focused}
+              color={focused ? Colors.primary : Colors.textSecondary}
             />
           ),
         }}

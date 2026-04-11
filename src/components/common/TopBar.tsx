@@ -3,12 +3,11 @@ import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import {RootStackParamList} from '../../navigation/types';
 import {useApp} from '../../store/AppContext';
 import {Colors} from '../../theme';
 import {Avatar} from './Avatar';
-import {IconButton} from './IconButton';
+import {ChatBubbleIcon, SearchIcon} from './icons';
 
 type Nav = StackNavigationProp<RootStackParamList>;
 
@@ -41,21 +40,24 @@ export function TopBar() {
           onPress={() => navigation.navigate('Search')}
           style={styles.searchPill}
           activeOpacity={0.8}>
-          <Icon name="search" size={18} color={Colors.textSecondary} style={styles.searchIcon} />
+          <View style={styles.searchIcon}>
+            <SearchIcon size={18} color={Colors.textSecondary} />
+          </View>
           <Text style={styles.searchPlaceholder}>Search</Text>
         </TouchableOpacity>
 
         {/* Right: Messaging icon with unread dot */}
         <View style={styles.messagingWrap}>
-          <IconButton
-            name="chat-bubble"
+          <TouchableOpacity
             testID="topbar-messaging"
             onPress={() => navigation.navigate('Messaging')}
-            size={24}
-            color={Colors.textSecondary}
-          />
+            style={styles.messagingButton}
+            hitSlop={{top: 8, bottom: 8, left: 8, right: 8}}
+            activeOpacity={0.7}>
+            <ChatBubbleIcon size={26} color={Colors.textSecondary} />
+          </TouchableOpacity>
           {unread && (
-            <View style={styles.unreadDot} />
+            <View style={styles.unreadDot} pointerEvents="none" />
           )}
         </View>
       </View>
@@ -99,6 +101,9 @@ const styles = StyleSheet.create({
   },
   messagingWrap: {
     position: 'relative',
+  },
+  messagingButton: {
+    padding: 4,
   },
   unreadDot: {
     position: 'absolute',
