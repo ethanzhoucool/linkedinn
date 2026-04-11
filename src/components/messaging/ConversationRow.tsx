@@ -14,48 +14,50 @@ export function ConversationRow({conversation, onPress}: Props) {
   const {unread, person, lastMessagePreview, lastMessageAt} = conversation;
 
   return (
-    <TouchableOpacity
-      testID={`conversation-row-${conversation.id}`}
-      onPress={onPress}
-      activeOpacity={0.7}
-      style={styles.container}>
-      <Avatar
-        uri={person.avatarUrl}
-        size={56}
-        online={conversation.online}
-      />
-      <View style={styles.content}>
-        <View style={styles.topRow}>
-          <Text
-            style={[
-              styles.name,
-              unread ? styles.nameUnread : styles.nameRead,
-            ]}
-            numberOfLines={1}>
-            {person.name}
-          </Text>
-          <Text
-            style={[
-              styles.timestamp,
-              {color: unread ? Colors.primary : Colors.textTertiary},
-            ]}>
-            {lastMessageAt}
-          </Text>
+    <View>
+      <TouchableOpacity
+        testID={`conversation-row-${conversation.id}`}
+        onPress={onPress}
+        activeOpacity={0.7}
+        style={styles.container}>
+        <Avatar
+          uri={person.avatarUrl}
+          size={56}
+          online={conversation.online}
+        />
+        <View style={styles.content}>
+          <View style={styles.topRow}>
+            <Text
+              style={[
+                styles.name,
+                unread ? styles.nameUnread : styles.nameRead,
+              ]}
+              numberOfLines={1}>
+              {person.name}
+            </Text>
+            <Text
+              style={[
+                styles.timestamp,
+                {color: unread ? Colors.primary : Colors.textTertiary},
+              ]}>
+              {lastMessageAt}
+            </Text>
+          </View>
+          <View style={styles.bottomRow}>
+            <Text
+              numberOfLines={1}
+              style={[
+                styles.preview,
+                unread ? styles.previewUnread : styles.previewRead,
+              ]}>
+              {lastMessagePreview}
+            </Text>
+            {unread && <View style={styles.unreadDot} />}
+          </View>
         </View>
-        <View style={styles.bottomRow}>
-          <Text
-            numberOfLines={1}
-            style={[
-              styles.preview,
-              unread ? styles.previewUnread : styles.previewRead,
-            ]}>
-            {lastMessagePreview}
-          </Text>
-          {unread && <View style={styles.unreadDot} />}
-        </View>
-      </View>
+      </TouchableOpacity>
       <HairlineDivider />
-    </TouchableOpacity>
+    </View>
   );
 }
 
